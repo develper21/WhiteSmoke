@@ -1,0 +1,10 @@
+[package]
+name = "whitesmoke"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tauri = { version = "1.4", features = ["api-all"] }
+reqwest = { version = "0.11", features = ["json", "blocking", "rustls-tls"] }
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
