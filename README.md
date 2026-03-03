@@ -80,19 +80,61 @@ Customization of the Tauri window (dark mode, menus, tray, etc.) happens in `src
 
 The current UI includes a **dark / light mode toggle**; the preference is saved locally.  A real auto‑updater endpoint can be added by enabling the `updater` section and pointing to a release API (GitHub, custom server).
 
+### Command-Line Interface
+
+The **CLI** module provides comprehensive command-line management of applications, with support for installation, launching, snapshots, and restoration.
+
+**Commands:**
+
+```bash
+# Build CLI
+cd CLI && npm install && npm run build
+
+# Install an application
+ws-cli install "Notepad++" /path/to/notepad++.exe
+
+# List all installed apps
+ws-cli list
+
+# Launch an installed app
+ws-cli launch <app-id> notepad++.exe
+
+# Create a snapshot (backup) of app state
+ws-cli snapshot <app-id>
+
+# Restore app from snapshot
+ws-cli restore <app-id> ~/.whitesmoke/snapshots/Notepad++*.tar.gz
+
+# Remove an app
+ws-cli remove <app-id>
+
+# Override API endpoint
+WHITESMOKE_API=http://192.168.1.100:4000 ws-cli list
+```
+
+See [CLI/README.md](./CLI/README.md) for complete documentation and workflow examples.
+
 4. **Start frontend** (in new terminal):
    ```bash
    cd Frontend
    npm install
    npm run dev
    ```
-5. **Use CLI** (optional for quick tests):
+
+5. **Snapshot Workflow** (optional):
    ```bash
+   # After backend is running:
    cd CLI
-   npm install
-   npm run build
-   node dist/index.js install "MyApp" /path/to/setup.exe
+   npm install && npm run build
+   
+   # Create game backup before risky operations
+   ws-cli snapshot <game-id>
+   
+   # Play & save progress ...
+   
+   # Restore if something breaks
+   ws-cli restore <game-id> ~/.whitesmoke/snapshots/GameName-*.tar.gz
    ```
 
-The current implementation only creates Wine prefixes and stores a minimal in-memory inventory.  See the phase roadmap for next features.
+The implementation now supports persistent SQLite storage with Prisma ORM, installer detection, cgroup sandboxing, file uploads, and snapshot management. See [Backend/README.md](./Backend/README.md) for API documentation and [Frontend/README.md](./Frontend/README.md) for UI component library details.
 
