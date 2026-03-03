@@ -1,0 +1,16 @@
+{
+  "name": "whitesmoke",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "Backend",
+    "Core",
+    "Frontend",
+    "CLI"
+  ],
+  "scripts": {
+    "bootstrap": "npm install --workspaces",
+    "build": "npm run build --workspaces",
+    "start": "npm run start --workspaces"
+  }
+}
