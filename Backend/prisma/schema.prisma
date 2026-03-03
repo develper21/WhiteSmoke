@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model App {
+  id        String   @id @default(cuid())
+  name      String
+  prefixPath String  @unique
+  installerPath String?
+  installed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  launchCount Int     @default(0)
+  lastLaunch DateTime?
+
+  snapshots Snapshot[]
+  logs      InstallLog[]
+
+  @@index([installed])
+}
+
+model Snapshot {
+  id              String @id @default(cuid())
+  appId           String
+  app             App    @relation(fields: [appId], references: [id], onDelete: Cascade)
+  
+  timestamp       DateTime @default(now())
+  snapshotPath    String   @unique
+  prefixSize      Int      // bytes
+  wineVersion     String?
+  notes           String?
+
+  @@index([appId])
+  @@index([timestamp])
+}
+
+model InstallLog {
+  id        String   @id @default(cuid())
+  appId     String
+  app       App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+  
+  timestamp DateTime @default(now())
+  message   String
+  status    String   @default("info") // info, warning, error
+
+  @@index([appId])
+}
